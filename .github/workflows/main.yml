@@ -1,0 +1,20 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USER }}
+        password: ${{ secrets.DOCKER_PASS }}
+    - name: Build and Push app
+      run: |
+        docker build -t ${{ secrets.DOCKER_USER }}/myapp_container ./myapp
+        docker push ${{ secrets.DOCKER_USER }}/myapp_container
